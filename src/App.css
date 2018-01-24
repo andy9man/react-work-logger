@@ -12,6 +12,14 @@ input::-webkit-input-placeholder {
   font-style: italic;
 }
 
+button {
+  background-color: #98C1D9;
+}
+
+button:disabled, button[disabled=disabled] {
+  background-color: #BFBFBF;
+}
+
 header {
   display: inline-block;
   width: 100%;

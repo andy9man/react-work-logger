@@ -61,7 +61,8 @@ const styles = {
     width: '75%',
     height: '90%',
     border: '3px solid black',
-    padding: '10px'
+    padding: '10px',
+    backgroundColor: '#E8E8E8'
   }
 }
 
@@ -70,7 +71,8 @@ const validateDescription = (description) => {
 }
 
 const validateMinutes = (minutes) => {
-  return (minutes >= 0 && minutes <= 240)
+  console.log("Minutes Value: " + minutes + " | " + (minutes >= 0 && minutes <= 240));
+  return minutes.trim() === '' ? false : minutes >= 0 && minutes <= 240;
 }
 
 const getTimeFormat = (minutes) => {
@@ -115,15 +117,16 @@ class App extends Component {
   }
 
   handleInputDescription(e) {
-    validateDescription(e.target.value) ? this.setState( {disableForm: !validateMinutes(this.state.minutes), description: e.target.value, error: {description: '', minutes: this.state.error.minutes}} ) :
-
-      this.setState( {disableForm: true, description: e.target.value, error: {description: 'Description must be at least 5 characters', minutes: this.state.error.minutes}} );
+    console.log("Minutes: " + !validateMinutes(this.state.minutes));
+    validateDescription(e.target.value) ?
+      this.setState( {disableForm: !(validateMinutes(this.state.minutes)), description: e.target.value, error: {description: '', minutes: this.state.error.minutes}} ) :
+        this.setState( {disableForm: true, description: e.target.value, error: {description: 'Description must be at least 5 characters', minutes: this.state.error.minutes}} );
   }
 
   handleInputMinutes(e) {
     validateMinutes(e.target.value) ?
-      this.setState( {disableForm: !validateDescription(this.state.description), minutes: e.target.value, error: {description: this.state.error.description, minutes: ''}} ) :
-      this.setState( {disableForm: true, minutes: e.target.value, error: {description: this.state.error.description, minutes: 'Must be must be 0, but no more than 240 minutes'}} );
+      this.setState( {disableForm: !(validateDescription(this.state.description)), minutes: e.target.value, error: {description: this.state.error.description, minutes: ''}} ) :
+        this.setState( {disableForm: true, minutes: e.target.value, error: {description: this.state.error.description, minutes: 'Must be must be 0, but no more than 240 minutes'}} );
   }
 
   handleSelectChange(e) {
@@ -167,7 +170,7 @@ class App extends Component {
           description={this.state.description}
           minutes={this.state.minutes}
           error={this.state.error}
-          disabledForm={this.state.disableForm}
+          disableForm={this.state.disableForm}
         />
         <div className="row">
           <div className="column">
