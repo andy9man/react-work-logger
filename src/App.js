@@ -71,7 +71,6 @@ const validateDescription = (description) => {
 }
 
 const validateMinutes = (minutes) => {
-  console.log("Minutes Value: " + minutes + " | " + (minutes >= 0 && minutes <= 240));
   return minutes.trim() === '' ? false : minutes >= 0 && minutes <= 240;
 }
 
