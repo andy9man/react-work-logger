@@ -57,7 +57,7 @@ const styles = {
     display: 'inline'
   },
 
-  workContiner: {
+  workContainer: {
     width: '75%',
     height: '90%',
     border: '3px solid black',
@@ -171,35 +171,23 @@ class App extends Component {
           error={this.state.error}
           disableForm={this.state.disableForm}
         />
-        <div className="row">
+        <div className="row" style={ {height: '50%'} }>
           <div className="column">
 
-            <div style={styles.workContiner}>
-              <h2 style={styles.left}>Personal</h2><h3 style={styles.right}>{getTimeFormat( this.getTotalMinutes( this.getWorkTypeSorted('personal') ) )}</h3>
-              {this.getWorkTypeSorted('personal').map( (item, index) => {
-                return (
-                  <div key={index} style={styles.workItem}>
-                    <p style={{display: 'inline'}}>{getTimeFormat(item.minutes)}</p>
-                    <p style={{color: 'red', display: 'inline-block', marginLeft: '40px'}}>{item.description}</p>
-                  </div>
-                );
-              })}
-            </div>
+            <WorkDisplay
+              totalTime={getTimeFormat( this.getTotalMinutes( this.getWorkTypeSorted('personal') ) )}
+              workSorted={this.getWorkTypeSorted('personal')}
+              title="Personal"
+            />
 
           </div>
           <div className="column">
 
-            <div style={styles.workContiner}>
-              <h2 style={styles.left}>Work</h2><h3 style={styles.right}>{getTimeFormat( this.getTotalMinutes( this.getWorkTypeSorted('work') ) )}</h3>
-              {this.getWorkTypeSorted('work').map( (item, index) => {
-                return (
-                  <div key={index} style={styles.workItem}>
-                    <p style={{display: 'inline'}}>{getTimeFormat(item.minutes)}</p>
-                    <p style={{color: 'red', display: 'inline-block', marginLeft: '40px'}}>{item.description}</p>
-                  </div>
-                );
-              })}
-            </div>
+            <WorkDisplay
+              totalTime={getTimeFormat( this.getTotalMinutes( this.getWorkTypeSorted('work') ) )}
+              workSorted={this.getWorkTypeSorted('work')}
+              title="Work"
+            />
 
           </div>
         </div>
@@ -255,6 +243,27 @@ class WorkForm extends Component {
 
         </form>
       </div>
+    );
+  }
+}
+
+class WorkDisplay extends Component {
+
+  render() {
+    return (
+
+      <div style={styles.workContainer}>
+        <h2 style={styles.left}>{this.props.title}</h2><h3 style={styles.right}>{this.props.totalTime}</h3>
+        {this.props.workSorted.map( (item, index) => {
+          return (
+            <div key={index} style={styles.workItem}>
+              <p style={{display: 'inline'}}>{getTimeFormat(item.minutes)}</p>
+              <p style={{color: 'red', display: 'inline-block', marginLeft: '40px'}}>{item.description}</p>
+            </div>
+          );
+        })}
+      </div>
+
     );
   }
 }
