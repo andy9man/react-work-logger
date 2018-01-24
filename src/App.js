@@ -142,7 +142,7 @@ class App extends Component {
     //Sorts in descending order
     const filterArray = this.state.work.filter( item => item.project === type);
     return filterArray.sort( (a, b) => {
-      return (a.minutes < b.minutes);
+      return (parseInt(a.minutes, 10) < parseInt(b.minutes, 10));
     });
   }
 
