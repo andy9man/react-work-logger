@@ -75,10 +75,8 @@ const validateMinutes = (minutes) => {
 
 const getTimeFormat = (minutes) => {
   minutes = parseInt(minutes, 10);
-  console.log(minutes);
   let h = Math.floor(minutes / 60);
   let m = minutes % 60;
-  console.log(h + " : " +  m);
   //h = h < 10 ? '0' + h : h;
   m = m < 10 ? '0' + m : m;
   return h + ':' + m;
@@ -160,35 +158,17 @@ class App extends Component {
         <header>
           <h1>Work Logger</h1>
         </header>
-        <div style={styles.borderBottom} className="row">
-          <form style={styles.form} onSubmit={this.handleClick}>
-
-            <div style={styles.margin}>
-              <label style={styles.label} htmlFor="workType">Project</label>
-              <select onChange={this.handleSelectChange} value={this.state.project} name="workType">
-                <option value="personal">Personal</option>
-                <option value="work">Work</option>
-              </select>
-            </div>
-
-            <div style={styles.margin}>
-              <label style={styles.label} htmlFor="description">Description</label>
-              <input type="text" name="description" onInput={this.handleInputDescription} style={styles.inputDescription} value={this.state.description} placeholder="Enter a Description" />
-              <p style={styles.error}>{this.state.error.description}</p>
-            </div>
-
-            <div style={styles.margin}>
-              <label style={styles.label} htmlFor="minutes">Minutes</label>
-              <input type="number" name="minutes" onInput={this.handleInputMinutes} style={styles.inputMinutes} value={this.state.minutes} placeholder="30" />
-              <p style={styles.error}>{this.state.error.minutes}</p>
-            </div>
-
-            <div style={styles.margin}>
-              <button style={styles.inputButton} disabled={this.state.disableForm}>Add</button>
-            </div>
-
-          </form>
-        </div>
+        <WorkForm
+          handleClick={this.handleClick}
+          handleSelectChange={this.handleSelectChange}
+          handleInputDescription={this.handleInputDescription}
+          handleInputMinutes={this.handleInputMinutes}
+          project={this.state.project}
+          description={this.state.description}
+          minutes={this.state.minutes}
+          error={this.state.error}
+          disabledForm={this.state.disableForm}
+        />
         <div className="row">
           <div className="column">
 
@@ -196,9 +176,9 @@ class App extends Component {
               <h2 style={styles.left}>Personal</h2><h3 style={styles.right}>{getTimeFormat( this.getTotalMinutes( this.getWorkTypeSorted('personal') ) )}</h3>
               {this.getWorkTypeSorted('personal').map( (item, index) => {
                 return (
-                  <div style={styles.workItem}>
-                    <p key={index} style={{display: 'inline'}}>{getTimeFormat(item.minutes)}</p>
-                    <p key={index} style={{color: 'red', display: 'inline-block', marginLeft: '40px'}}>{item.description}</p>
+                  <div key={index} style={styles.workItem}>
+                    <p style={{display: 'inline'}}>{getTimeFormat(item.minutes)}</p>
+                    <p style={{color: 'red', display: 'inline-block', marginLeft: '40px'}}>{item.description}</p>
                   </div>
                 );
               })}
@@ -208,14 +188,70 @@ class App extends Component {
           <div className="column">
 
             <div style={styles.workContiner}>
-              <h2 style={styles.left}>Work</h2>
-                {this.getWorkTypeSorted('work').map( (item, index) => {
-                  return (<p key={index} style={styles.left}>{item.minutes} -- {item.description}</p>);
-                })}
-
+              <h2 style={styles.left}>Work</h2><h3 style={styles.right}>{getTimeFormat( this.getTotalMinutes( this.getWorkTypeSorted('work') ) )}</h3>
+              {this.getWorkTypeSorted('work').map( (item, index) => {
+                return (
+                  <div key={index} style={styles.workItem}>
+                    <p style={{display: 'inline'}}>{getTimeFormat(item.minutes)}</p>
+                    <p style={{color: 'red', display: 'inline-block', marginLeft: '40px'}}>{item.description}</p>
+                  </div>
+                );
+              })}
             </div>
+
           </div>
         </div>
+      </div>
+    );
+  }
+}
+
+class WorkForm extends Component {
+
+  render() {
+    return (
+      <div style={styles.borderBottom} className="row">
+        <form style={styles.form} onSubmit={this.props.handleClick}>
+
+          <div style={styles.margin}>
+            <label style={styles.label} htmlFor="workType">Project</label>
+            <select onChange={this.props.handleSelectChange} value={this.props.project} name="workType">
+              <option value="personal">Personal</option>
+              <option value="work">Work</option>
+            </select>
+          </div>
+
+          <div style={styles.margin}>
+            <label style={styles.label} htmlFor="description">Description</label>
+            <input
+              type="text" name="description"
+              onInput={this.props.handleInputDescription}
+              style={styles.inputDescription}
+              value={this.props.description}
+              placeholder="Enter a Description"
+            />
+            <p style={styles.error}>{this.props.error.description}</p>
+          </div>
+
+          <div style={styles.margin}>
+            <label style={styles.label} htmlFor="minutes">Minutes</label>
+            <input
+              type="number" name="minutes"
+              onInput={this.props.handleInputMinutes}
+              style={styles.inputMinutes}
+              value={this.props.minutes}
+              placeholder="30"
+            />
+            <p style={styles.error}>{this.props.error.minutes}</p>
+          </div>
+
+          <div style={styles.margin}>
+            <button
+              style={styles.inputButton}
+              disabled={this.props.disableForm}>Add</button>
+          </div>
+
+        </form>
       </div>
     );
   }
